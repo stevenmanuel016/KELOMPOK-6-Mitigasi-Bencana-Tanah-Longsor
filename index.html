@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Prediksi Tanah Longsor - Sederhana</title>
+  <style>
+    :root{--bg:#f7fafc;--card:#ffffff;--muted:#6b7280;--accent:#0ea5a4}
+    body{font-family:Inter, Arial, sans-serif;background:var(--bg);color:#111;margin:0;padding:20px}
+    .container{max-width:1100px;margin:0 auto}
+    header{display:flex;align-items:center;gap:16px}
+    h1{margin:0;font-size:20px}
+    p.lead{margin:6px 0 18px;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:360px 1fr;gap:18px}
+    .card{background:var(--card);padding:14px;border-radius:10px;box-shadow:0 6px 18px rgba(15,23,42,0.06)}
+    label{display:block;font-size:13px;margin-bottom:6px;color:var(--muted)}
+    input[type=file]{display:block}
+    select,multiselect,input[type=number],button{width:100%;padding:8px;border-radius:8px;border:1px solid #e6e9ef}
+    button{background:var(--accent);color:white;border:0;cursor:pointer}
+    .small{font-size:13px;color:var(--muted)}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th,td{padding:6px;border-bottom:1px solid #eef2f6;text-align:left}
+    .controls{display:flex;gap:8px}
+    .chart{width:100%;height:220px}
+    .preview{max-height:260px;overflow:auto}
+    footer{margin-top:18px;color:var(--muted);font-size:13px}
+    .row{display:flex;gap:8px}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Prediksi Tanah Longsor (Sederhana)</h1>
+        <p class="lead">Upload file CSV (header wajib). Pilih target dan fitur, lalu tekan <strong>Train</strong>.</p>
+      </div>
+    </header>
+
+    <div class="grid">
+      <div class="card">
+        <label>1) Upload CSV</label>
+        <input id="file" type="file" accept=".csv" />
+        <p class="small">Atau klik <button id="load-sample" style="display:inline-block;vertical-align:middle;padding:6px 10px;border-radius:6px;background:#eef;">Load CSV dari server</button> jika file sudah diletakkan di folder server dengan nama <code>prediksi_longsor_sulawesi_tengah.csv</code>.</p>
+
+        <hr/>
+        <label>2) Pilih kolom target (label)</label>
+        <select id="target"></select>
+
+        <label style="margin-top:8px">3) Pilih fitur (tekan ctrl/cmd untuk memilih lebih dari 1)</label>
+        <select id="features" multiple size="6"></select>
+
+        <label style="margin-top:8px">4) Algoritma</label>
+        <select id="algo">
+          <option value="logistic">Logistic Regression (binary)</option>
+          <option value="linear">Linear Regression</option>
+        </select>
+
+        <div style="margin-top:10px" class="row">
+          <button id="train">Train</button>
+          <button id="preview-data" style="background:#f3f4f6;color:#111">Preview</button>
+        </div>
+
+        <div id="train-output" style="margin-top:12px"></div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <div><strong>Preview & Visualisasi</strong><div class="small">Tabel awal, statistik dan chart sederhana</div></div>
+          <div class="small">Rows: <span id="rows">0</span> • Cols: <span id="cols">0</span></div>
+        </div>
+
+        <div class="preview card" id="table-wrapper" style="padding:10px;background:transparent;border-radius:8px;box-shadow:none">
+          <table id="table"><thead></thead><tbody></tbody></table>
+        </div>
+
+        <div style="margin-top:12px">
+          <label>Histogram fitur:</label>
+          <select id="hist-col"></select>
+          <canvas id="hist" class="chart"></canvas>
+        </div>
+
+        <div style="margin-top:12px">
+          <label>Predict (masukkan nilai fitur):</label>
+          <div id="predict-inputs"></div>
+          <div style="display:flex;gap:8px;margin-top:8px"><button id="predict">Predict</button><div id="pred-result" class="small" style="align-self:center"></div></div>
+        </div>
+
+      </div>
+    </div>
+
+    <footer>
+      Petunjuk singkat: CSV harus punya baris header. Untuk prediksi biner, pastikan target memiliki dua nilai (contoh: 0/1 atau no/yes).
+    </footer>
+  </div>
+
+  <script>
+  // --- util: simple CSV parser ---
+  function parseCSV(text){
+    const lines = text.replace(/\r/g,'').split('\n').filter(l=>l.trim().length>0);
+    if(lines.length===0) return {cols:[],rows:[]};
+    const header = splitLine(lines[0]);
+    const rows = [];
+    for(let i=1;i<lines.length;i++){
+      const parts = splitLine(lines[i]);
+      if(parts.length===0) continue;
+      const obj={};
+      for(let j=0;j<header.length;j++) obj[header[j]] = parts[j]!==undefined ? parts[j] : '';
+      rows.push(obj);
+    }
+    return {cols:header,rows};
+  }
+  function splitLine(line){
+    const out=[]; let cur=''; let inq=false;
+    for(let i=0;i<line.length;i++){ const ch=line[i];
+      if(ch==='"'){ inq=!inq; continue; }
+      if(ch===',' && !inq){ out.push(cur); cur=''; } else cur+=ch;
+    }
+    out.push(cur);
+    return out.map(s=>s.trim());
+  }
+
+  // --- state ---
+  let DATA = {cols:[],rows:[]};
+  let MODEL = null;
+
+  // --- DOM ---
+  const fileEl = document.getElementById('file');
+  const loadSample = document.getElementById('load-sample');
+  const targetSel = document.getElementById('target');
+  const featSel = document.getElementById('features');
+  const algoSel = document.getElementById('algo');
+  const trainBtn = document.getElementById('train');
+  const previewBtn = document.getElementById('preview-data');
+  const rowsSpan = document.getElementById('rows');
+  const colsSpan = document.getElementById('cols');
+  const tableHead = document.querySelector('#table thead');
+  const tableBody = document.querySelector('#table tbody');
+  const histCol = document.getElementById('hist-col');
+  const histCanvas = document.getElementById('hist');
+  const trainOutput = document.getElementById('train-output');
+  const predictInputs = document.getElementById('predict-inputs');
+  const predictBtn = document.getElementById('predict');
+  const predResult = document.getElementById('pred-result');
+
+  fileEl.addEventListener('change', e=>{
+    const f = e.target.files[0]; if(!f) return;
+    const reader = new FileReader();
+    reader.onload = ()=>{ loadDataFromText(reader.result); }
+    reader.readAsText(f);
+  });
+
+  loadSample.addEventListener('click', ()=>{
+    fetch('prediksi_longsor_sulawesi_tengah.csv').then(r=>r.text()).then(t=>loadDataFromText(t)).catch(err=>alert('Gagal load: pastikan file diletakkan di folder server dengan nama exact: prediksi_longsor_sulawesi_tengah.csv'))
+  });
+
+  function loadDataFromText(text){ DATA = parseCSV(text); renderMeta(); renderTable(); populateSelectors(); }
+
+  function renderMeta(){ rowsSpan.textContent = DATA.rows.length; colsSpan.textContent = DATA.cols.length; }
+  function renderTable(){ tableHead.innerHTML=''; tableBody.innerHTML=''; if(DATA.cols.length===0) return; const tr=document.createElement('tr'); DATA.cols.forEach(c=>{ const th=document.createElement('th'); th.textContent=c; tr.appendChild(th); }); tableHead.appendChild(tr);
+    const max = Math.min(80, DATA.rows.length);
+    for(let i=0;i<max;i++){ const r=DATA.rows[i]; const tr2=document.createElement('tr'); DATA.cols.forEach(c=>{ const td=document.createElement('td'); td.textContent = r[c]; tr2.appendChild(td); }); tableBody.appendChild(tr2); }
+  }
+
+  function populateSelectors(){ clearSelect(targetSel); clearSelect(featSel); clearSelect(histCol);
+    DATA.cols.forEach(c=>{ const o1=new Option(c,c); targetSel.add(o1); const o2=new Option(c,c); featSel.add(o2); const o3=new Option(c,c); histCol.add(o3); });
+  }
+  function clearSelect(s){ while(s.options.length>0) s.remove(0); }
+
+  previewBtn.addEventListener('click', ()=>{ renderTable(); drawHist(); });
+  histCol.addEventListener('change', ()=> drawHist());
+
+  function drawHist(){ const col = histCol.value; if(!col) return; const vals = DATA.rows.map(r=>parseFloat(r[col])).filter(v=>!isNaN(v)); if(vals.length===0) return; const bins=20; const min=Math.min(...vals), max=Math.max(...vals); const range=max-min||1; const counts=new Array(bins).fill(0); vals.forEach(v=>{ let idx=Math.floor((v-min)/range*bins); if(idx<0) idx=0; if(idx>=bins) idx=bins-1; counts[idx]++; });
+    const c = histCanvas; c.width = c.clientWidth*devicePixelRatio; c.height = c.clientHeight*devicePixelRatio; const ctx = c.getContext('2d'); ctx.scale(devicePixelRatio,devicePixelRatio); ctx.clearRect(0,0,c.clientWidth,c.clientHeight);
+    const w = c.clientWidth, h = c.clientHeight; const barW = w/bins*0.9; const maxC = Math.max(...counts);
+    ctx.fillStyle = '#0ea5a4'; for(let i=0;i<bins;i++){ const cw = (counts[i]/maxC)*(h-30); ctx.fillRect(i*(w/bins)+4, h-10-cw, barW, cw); }
+    ctx.fillStyle='#333'; ctx.font='12px sans-serif'; ctx.fillText(col,8,12);
+  }
+
+  // --- simple ML: normalize, simple linear & logistic regression (gradient descent) ---
+  function extractXY(target, features){ const X=[]; const y=[]; DATA.rows.forEach(r=>{
+    const row = features.map(f=>parseFloat(r[f])); if(row.some(v=>isNaN(v))) return; const tv = r[target]; const yv = parseFloat(tv); if(isNaN(yv) && typeof tv === 'string') {
+      // try map to 0/1 for yes/no
+      const low = tv.toLowerCase(); if(low==='yes'||low==='ya'||low==='1'||low==='true') y.push(1); else if(low==='no'||low==='tidak'||low==='0'||low==='false') y.push(0); else return; }
+    else y.push(yv);
+    X.push(row);
+  });
+  return {X,y}; }
+
+  function normalize(X){ const m = X[0].length; const mu = new Array(m).fill(0); const sd = new Array(m).fill(0);
+    const N = X.length; for(let j=0;j<m;j++){ let s=0; for(let i=0;i<N;i++) s+=X[i][j]; mu[j]=s/N; let s2=0; for(let i=0;i<N;i++) s2+=Math.pow(X[i][j]-mu[j],2); sd[j]=Math.sqrt(s2/N)||1; for(let i=0;i<N;i++) X[i][j] = (X[i][j]-mu[j])/sd[j]; }
+    return {X,mu,sd};
+  }
+
+  function trainLinear(X,y,opts={lr:0.01,iter:1000}){
+    const N=X.length, m=X[0].length; let w=new Array(m).fill(0), b=0;
+    for(let it=0; it<opts.iter; it++){
+      const preds = X.map((row,i)=> dot(w,row)+b );
+      const err = preds.map((p,i)=> p - y[i]);
+      for(let j=0;j<m;j++){ let g=0; for(let i=0;i<N;i++) g += err[i]*X[i][j]; w[j] -= opts.lr * (g/N); }
+      const gb = err.reduce((a,b)=>a+b,0)/N; b -= opts.lr * gb;
+    }
+    return {w,b};
+  }
+  function trainLogistic(X,y,opts={lr:0.1,iter:3000}){
+    const N=X.length, m=X[0].length; let w=new Array(m).fill(0), b=0;
+    for(let it=0; it<opts.iter; it++){
+      let gradW=new Array(m).fill(0); let gradB=0;
+      for(let i=0;i<N;i++){ const z = dot(w,X[i]) + b; const p = 1/(1+Math.exp(-z)); const err = p - y[i]; for(let j=0;j<m;j++) gradW[j] += err * X[i][j]; gradB += err; }
+      for(let j=0;j<m;j++) w[j] -= opts.lr * (gradW[j]/N);
+      b -= opts.lr * (gradB/N);
+    }
+    return {w,b};
+  }
+  function dot(a,b){ let s=0; for(let i=0;i<a.length;i++) s+=a[i]*b[i]; return s; }
+
+  trainBtn.addEventListener('click', ()=>{
+    const target = targetSel.value; const features = Array.from(featSel.selectedOptions).map(o=>o.value);
+    if(!target || features.length===0) return alert('Pilih target dan minimal 1 fitur');
+    const {X,y} = extractXY(target,features);
+    if(X.length<10) return alert('Data bersih terlalu sedikit (<10 rows) setelah parsing. Pastikan kolom fitur target berformat numerik atau biner.');
+    const norm = normalize(X);
+    let model=null; trainOutput.innerHTML = 'Training...';
+    if(algoSel.value==='linear'){
+      model = trainLinear(norm.X,y,{lr:0.03,iter:2000});
+      // compute mse
+      const preds = norm.X.map(r=> dot(model.w,r)+model.b); const mse = preds.reduce((a,p,i)=>a+Math.pow(p-y[i],2),0)/preds.length;
+      trainOutput.innerHTML = `<div class="small">Model linear trained. MSE: ${mse.toFixed(4)}</div>`;
+    } else {
+      model = trainLogistic(norm.X,y,{lr:0.15,iter:2500});
+      const preds = norm.X.map(r=> 1/(1+Math.exp(- (dot(model.w,r)+model.b) )) );
+      const predLabels = preds.map(p=> p>0.5?1:0); const acc = predLabels.filter((pl,i)=>pl===y[i]).length/predLabels.length;
+      trainOutput.innerHTML = `<div class="small">Model logistic trained. Accuracy (train): ${(acc*100).toFixed(2)}%</div>`;
+    }
+    MODEL = {model,features,target,mu:norm.mu,sd:norm.sd,algo:algoSel.value};
+    buildPredictInputs();
+  });
+
+  function buildPredictInputs(){ predictInputs.innerHTML=''; if(!MODEL) return; MODEL.features.forEach((f,i)=>{
+    const div=document.createElement('div'); div.style.marginTop='6px'; div.innerHTML = `<label class="small">${f}</label><input data-idx="${i}" type="number" step="any" />`; predictInputs.appendChild(div);
+  }); }
+
+  predictBtn.addEventListener('click', ()=>{
+    if(!MODEL) return alert('Belum ada model. Train dulu.');
+    const vals = Array.from(predictInputs.querySelectorAll('input')).map(inp=>parseFloat(inp.value));
+    if(vals.some(v=>isNaN(v))) return alert('Isi semua nilai fitur');
+    // normalize
+    const normVals = vals.map((v,i)=> (v - MODEL.mu[i]) / MODEL.sd[i] );
+    const s = dot(MODEL.model.w,normVals) + MODEL.model.b;
+    if(MODEL.algo==='linear'){ predResult.textContent = 'Prediksi (regresi): ' + s.toFixed(4); }
+    else { const p = 1/(1+Math.exp(-s)); predResult.textContent = 'Probabilitas longsor: ' + (p*100).toFixed(2) + '%'; }
+  });
+
+  // helper: attempt auto-load if file present via fetch
+  (function tryAutoFetch(){ fetch('prediksi_longsor_sulawesi_tengah.csv').then(r=>r.text()).then(t=>{ if(t && t.length>0) loadDataFromText(t); }).catch(()=>{}); })();
+
+  </script>
+</body>
+</html>

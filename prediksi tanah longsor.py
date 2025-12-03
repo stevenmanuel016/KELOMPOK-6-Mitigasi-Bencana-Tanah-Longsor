@@ -71,5 +71,27 @@ for factor, corr in risk_corr.items():
     if factor != 'risk_prob':
         print(f"{factor:25} : {corr:+.3f}")
 
+# ==================== 5. CLUSTERING WILAYAH ====================
+print("\n" + "="*60)
+print("🏙️  CLUSTERING WILAYAH BERDASARKAN KARAKTERISTIK")
+print("="*60)
+
+# Persiapan data untuk clustering
+cluster_features = ['rainfall_mm', 'slope_deg', 'elevation_m', 'ndvi', 'risk_prob']
+X = df[cluster_features]
+
+# Standardisasi
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# K-Means Clustering
+kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
+df['cluster'] = kmeans.fit_predict(X_scaled)
+
+# Analisis cluster
+cluster_analysis = df.groupby('cluster')[cluster_features].mean()
+print("\n📊 KARAKTERISTIK SETIAP CLUSTER:")
+print(cluster_analysis)
+
 
 

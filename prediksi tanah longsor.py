@@ -56,3 +56,20 @@ yearly_risk = df.groupby('year')['risk_prob'].agg(['mean', 'max', 'std'])
 print("\n📈 TREND RISIKO TAHUNAN:")
 print(yearly_risk)
 
+# ==================== 4. ANALISIS FAKTOR DOMINAN ====================
+print("\n" + "="*60)
+print("🔬 ANALISIS FAKTOR PENYEBAB")
+print("="*60)
+
+# Korelasi antar variabel numerik
+numeric_cols = ['rainfall_mm', 'slope_deg', 'elevation_m', 'ndvi', 'population_density', 'previous_landslides', 'risk_prob']
+correlation_matrix = df[numeric_cols].corr()
+
+print("\n🔗 KORELASI DENGAN RISIKO LONGSOR:")
+risk_corr = correlation_matrix['risk_prob'].sort_values(ascending=False)
+for factor, corr in risk_corr.items():
+    if factor != 'risk_prob':
+        print(f"{factor:25} : {corr:+.3f}")
+
+
+

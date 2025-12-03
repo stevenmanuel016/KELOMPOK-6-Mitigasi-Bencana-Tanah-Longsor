@@ -93,5 +93,54 @@ cluster_analysis = df.groupby('cluster')[cluster_features].mean()
 print("\n📊 KARAKTERISTIK SETIAP CLUSTER:")
 print(cluster_analysis)
 
+# ==================== 6. VISUALISASI ====================
+print("\n" + "="*60)
+print("📊 GENERATING VISUALISASI...")
+print("="*60)
+
+# Setup style
+plt.style.use('seaborn-v0_8-darkgrid')
+fig, axes = plt.subplots(2, 2, figsize=(15, 12))
+fig.suptitle('ANALISIS KOMPREHENSIF PREDIKSI LONGSOR SULAWESI TENGAH', fontsize=16, fontweight='bold')
+
+# 1. Distribusi Probabilitas Risiko
+axes[0, 0].hist(df['risk_prob'], bins=20, edgecolor='black', alpha=0.7, color='skyblue')
+axes[0, 0].axvline(df['risk_prob'].mean(), color='red', linestyle='--', linewidth=2, label=f'Rata-rata: {df["risk_prob"].mean():.3f}')
+axes[0, 0].set_xlabel('Probabilitas Risiko')
+axes[0, 0].set_ylabel('Frekuensi')
+axes[0, 0].set_title('Distribusi Probabilitas Risiko Longsor')
+axes[0, 0].legend()
+axes[0, 0].grid(True, alpha=0.3)
+
+# 2. Trend Risiko per Tahun
+yearly_stats = df.groupby('year')['risk_prob'].agg(['mean', 'std'])
+axes[0, 1].plot(yearly_stats.index, yearly_stats['mean'], marker='o', linewidth=2, markersize=8, color='green')
+axes[0, 1].fill_between(yearly_stats.index, 
+                       yearly_stats['mean'] - yearly_stats['std'], 
+                       yearly_stats['mean'] + yearly_stats['std'], 
+                       alpha=0.2, color='green')
+axes[0, 1].set_xlabel('Tahun')
+axes[0, 1].set_ylabel('Rata-rata Probabilitas Risiko')
+axes[0, 1].set_title('Trend Risiko Longsor per Tahun')
+axes[0, 1].grid(True, alpha=0.3)
+
+# 3. Heatmap Korelasi
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', center=0, 
+            square=True, linewidths=1, cbar_kws={"shrink": 0.8}, ax=axes[1, 0])
+axes[1, 0].set_title('Heatmap Korelasi Antar Variabel')
+
+# 4. Scatter Plot: Curah Hujan vs Kemiringan Lereng
+scatter = axes[1, 1].scatter(df['rainfall_mm'], df['slope_deg'], 
+                            c=df['risk_prob'], cmap='Reds', 
+                            s=df['population_density']/10, alpha=0.6)
+axes[1, 1].set_xlabel('Curah Hujan (mm)')
+axes[1, 1].set_ylabel('Kemiringan Lereng (derajat)')
+axes[1, 1].set_title('Hubungan Curah Hujan, Kemiringan, dan Risiko')
+plt.colorbar(scatter, ax=axes[1, 1], label='Probabilitas Risiko')
+
+plt.tight_layout()
+plt.savefig('analisis_longsor_sulawesi_tengah.png', dpi=300, bbox_inches='tight')
+print("✅ Visualisasi disimpan sebagai 'analisis_longsor_sulawesi_tengah.png'")
+
 
 

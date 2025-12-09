@@ -1,0 +1,79 @@
+province,regency,year,rainfall_mm,slope_deg,elevation_m,ndvi,soil_type,land_cover,population_density,previous_landslides,risk_prob,risk_label,cluster,risk_category
+Sulawesi Tengah,Kab. Banggai,2019,204,25.0,534,0.668,Alluvial,Pertanian,1,1,0.05,Low,1,Rendah
+Sulawesi Tengah,Kab. Banggai Kepulauan,2019,166,10.2,315,0.239,Regosol,Hutan,887,1,0.037,Low,0,Rendah
+Sulawesi Tengah,Kab. Banggai Laut,2019,296,14.8,69,0.52,Regosol,Permukiman,247,1,0.065,Low,2,Sedang
+Sulawesi Tengah,Kab. Buol,2019,192,13.5,722,0.26,Andosol,Pertanian,19,0,0.043,Low,0,Rendah
+Sulawesi Tengah,Kab. Donggala,2019,300,21.3,485,0.502,Regosol,Pertanian,964,2,0.069,Low,1,Sedang
+Sulawesi Tengah,Kab. Morowali,2019,169,17.8,921,0.513,Organosol,Permukiman,309,1,0.041,Low,0,Rendah
+Sulawesi Tengah,Kab. Morowali Utara,2019,229,6.1,680,0.532,Organosol,Permukiman,523,1,0.049,Low,0,Rendah
+Sulawesi Tengah,Kab. Parigi Moutong,2019,188,18.8,656,0.317,Alluvial,Pertanian,328,1,0.045,Low,0,Rendah
+Sulawesi Tengah,Kab. Poso,2019,143,16.4,94,0.696,Alluvial,Hutan,436,1,0.035,Low,0,Rendah
+Sulawesi Tengah,Kab. Sigi,2019,328,16.7,323,0.228,Regosol,Hutan,703,1,0.072,Low,2,Tinggi
+Sulawesi Tengah,Kab. Tojo Una-Una,2019,253,22.8,253,0.768,Alluvial,Hutan,784,0,0.057,Low,1,Sedang
+Sulawesi Tengah,Kab. Tolitoli,2019,360,9.1,504,0.755,Organosol,Hutan,749,2,0.077,Low,2,Tinggi
+Sulawesi Tengah,Kota Palu,2019,277,13.1,1226,0.401,Andosol,Semak,610,1,0.06,Low,1,Sedang
+Sulawesi Tengah,Kab. Banggai,2020,292,5.0,577,0.725,Andosol,Hutan,29,0,0.06,Low,0,Sedang
+Sulawesi Tengah,Kab. Banggai Kepulauan,2020,350,20.0,38,0.493,Regosol,Pertanian,326,0,0.077,Low,2,Tinggi
+Sulawesi Tengah,Kab. Banggai Laut,2020,240,22.9,796,0.471,Organosol,Hutan,475,0,0.055,Low,1,Sedang
+Sulawesi Tengah,Kab. Buol,2020,230,24.6,770,0.272,Andosol,Permukiman,70,1,0.055,Low,1,Sedang
+Sulawesi Tengah,Kab. Donggala,2020,386,15.5,202,0.579,Alluvial,Perkebunan,456,2,0.085,Low,2,Tinggi
+Sulawesi Tengah,Kab. Morowali,2020,263,19.0,526,0.791,Latosol,Hutan,499,0,0.058,Low,1,Sedang
+Sulawesi Tengah,Kab. Morowali Utara,2020,181,4.9,144,0.331,Alluvial,Perkebunan,467,1,0.039,Low,0,Rendah
+Sulawesi Tengah,Kab. Parigi Moutong,2020,331,18.6,43,0.667,Andosol,Hutan,525,2,0.074,Low,2,Tinggi
+Sulawesi Tengah,Kab. Poso,2020,209,29.2,899,0.532,Organosol,Semak,567,2,0.053,Low,1,Sedang
+Sulawesi Tengah,Kab. Sigi,2020,286,28.2,868,0.468,Alluvial,Pertanian,319,1,0.067,Low,1,Sedang
+Sulawesi Tengah,Kab. Tojo Una-Una,2020,296,29.5,447,0.312,Alluvial,Permukiman,142,1,0.07,Low,1,Sedang
+Sulawesi Tengah,Kab. Tolitoli,2020,373,17.8,282,0.395,Alluvial,Pertanian,401,2,0.083,Low,2,Tinggi
+Sulawesi Tengah,Kota Palu,2020,279,16.6,424,0.826,Organosol,Hutan,163,0,0.061,Low,1,Sedang
+Sulawesi Tengah,Kab. Banggai,2021,177,21.9,27,0.783,Latosol,Pertanian,658,3,0.046,Low,0,Rendah
+Sulawesi Tengah,Kab. Banggai Kepulauan,2021,355,3.9,514,0.41,Andosol,Semak,125,0,0.072,Low,2,Tinggi
+Sulawesi Tengah,Kab. Banggai Laut,2021,346,8.1,190,0.204,Alluvial,Hutan,35,1,0.073,Low,2,Tinggi
+Sulawesi Tengah,Kab. Buol,2021,156,14.1,785,0.624,Organosol,Semak,321,0,0.035,Low,0,Rendah
+Sulawesi Tengah,Kab. Donggala,2021,307,22.8,425,0.767,Andosol,Hutan,571,0,0.068,Low,1,Sedang
+Sulawesi Tengah,Kab. Morowali,2021,244,23.4,202,0.568,Alluvial,Hutan,441,1,0.057,Low,1,Sedang
+Sulawesi Tengah,Kab. Morowali Utara,2021,444,27.6,564,0.63,Regosol,Hutan,12,1,0.098,Low,2,Tinggi
+Sulawesi Tengah,Kab. Parigi Moutong,2021,321,18.8,458,0.202,Latosol,Pertanian,1248,0,0.071,Low,2,Tinggi
+Sulawesi Tengah,Kab. Poso,2021,158,9.1,520,0.788,Latosol,Pertanian,573,1,0.036,Low,0,Rendah
+Sulawesi Tengah,Kab. Sigi,2021,266,23.6,10,0.268,Andosol,Pertanian,43,0,0.061,Low,1,Sedang
+Sulawesi Tengah,Kab. Tojo Una-Una,2021,183,23.7,266,0.413,Andosol,Perkebunan,111,1,0.046,Low,0,Rendah
+Sulawesi Tengah,Kab. Tolitoli,2021,315,23.5,956,0.417,Alluvial,Pertanian,440,0,0.071,Low,1,Tinggi
+Sulawesi Tengah,Kota Palu,2021,186,19.9,127,0.381,Regosol,Permukiman,607,1,0.045,Low,0,Rendah
+Sulawesi Tengah,Kab. Banggai,2022,250,19.6,454,0.489,Organosol,Hutan,138,1,0.057,Low,1,Sedang
+Sulawesi Tengah,Kab. Banggai Kepulauan,2022,303,17.1,802,0.647,Regosol,Hutan,610,0,0.066,Low,1,Sedang
+Sulawesi Tengah,Kab. Banggai Laut,2022,300,11.9,137,0.442,Latosol,Permukiman,364,0,0.064,Low,2,Sedang
+Sulawesi Tengah,Kab. Buol,2022,181,15.2,404,0.382,Alluvial,Semak,753,1,0.042,Low,0,Rendah
+Sulawesi Tengah,Kab. Donggala,2022,371,18.7,984,0.689,Regosol,Hutan,50,2,0.082,Low,1,Tinggi
+Sulawesi Tengah,Kab. Morowali,2022,267,28.9,384,0.398,Organosol,Pertanian,574,2,0.065,Low,1,Sedang
+Sulawesi Tengah,Kab. Morowali Utara,2022,401,10.9,1,0.254,Regosol,Hutan,256,1,0.084,Low,2,Tinggi
+Sulawesi Tengah,Kab. Parigi Moutong,2022,278,15.4,554,0.582,Organosol,Hutan,375,1,0.061,Low,1,Sedang
+Sulawesi Tengah,Kab. Poso,2022,255,11.2,398,0.594,Regosol,Hutan,193,1,0.055,Low,0,Sedang
+Sulawesi Tengah,Kab. Sigi,2022,265,23.5,1153,0.734,Andosol,Pertanian,236,0,0.061,Low,1,Sedang
+Sulawesi Tengah,Kab. Tojo Una-Una,2022,246,20.5,563,0.355,Alluvial,Permukiman,106,1,0.057,Low,1,Sedang
+Sulawesi Tengah,Kab. Tolitoli,2022,132,24.1,8,0.265,Organosol,Hutan,724,0,0.034,Low,0,Rendah
+Sulawesi Tengah,Kota Palu,2022,319,18.6,640,0.538,Andosol,Hutan,27,1,0.07,Low,1,Sedang
+Sulawesi Tengah,Kab. Banggai,2023,387,14.3,302,0.754,Alluvial,Hutan,53,1,0.083,Low,2,Tinggi
+Sulawesi Tengah,Kab. Banggai Kepulauan,2023,316,16.3,871,0.757,Organosol,Semak,442,0,0.068,Low,1,Sedang
+Sulawesi Tengah,Kab. Banggai Laut,2023,189,32.6,402,0.511,Latosol,Pertanian,606,1,0.049,Low,1,Rendah
+Sulawesi Tengah,Kab. Buol,2023,231,10.4,313,0.707,Alluvial,Pertanian,211,4,0.054,Low,0,Sedang
+Sulawesi Tengah,Kab. Donggala,2023,347,10.2,589,0.822,Latosol,Semak,502,0,0.072,Low,2,Tinggi
+Sulawesi Tengah,Kab. Morowali,2023,357,19.0,72,0.532,Alluvial,Permukiman,493,0,0.078,Low,2,Tinggi
+Sulawesi Tengah,Kab. Morowali Utara,2023,260,23.4,799,0.331,Organosol,Semak,273,1,0.06,Low,1,Sedang
+Sulawesi Tengah,Kab. Parigi Moutong,2023,284,25.5,438,0.487,Latosol,Hutan,825,1,0.065,Low,1,Sedang
+Sulawesi Tengah,Kab. Poso,2023,297,25.0,238,0.287,Andosol,Pertanian,743,1,0.069,Low,1,Sedang
+Sulawesi Tengah,Kab. Sigi,2023,341,24.4,615,0.744,Organosol,Permukiman,478,1,0.077,Low,1,Tinggi
+Sulawesi Tengah,Kab. Tojo Una-Una,2023,322,31.9,768,0.824,Andosol,Perkebunan,708,0,0.075,Low,1,Tinggi
+Sulawesi Tengah,Kab. Tolitoli,2023,366,13.1,680,0.588,Andosol,Hutan,963,0,0.077,Low,2,Tinggi
+Sulawesi Tengah,Kota Palu,2023,247,12.3,527,0.806,Latosol,Perkebunan,875,1,0.055,Low,0,Sedang
+Sulawesi Tengah,Kab. Banggai,2024,281,17.6,470,0.559,Alluvial,Permukiman,72,0,0.062,Low,1,Sedang
+Sulawesi Tengah,Kab. Banggai Kepulauan,2024,271,18.2,650,0.769,Latosol,Pertanian,249,3,0.063,Low,1,Sedang
+Sulawesi Tengah,Kab. Banggai Laut,2024,171,13.1,719,0.522,Alluvial,Perkebunan,795,0,0.039,Low,0,Rendah
+Sulawesi Tengah,Kab. Buol,2024,395,29.8,472,0.58,Latosol,Pertanian,481,0,0.089,Low,2,Tinggi
+Sulawesi Tengah,Kab. Donggala,2024,135,17.9,803,0.449,Latosol,Permukiman,276,0,0.033,Low,0,Rendah
+Sulawesi Tengah,Kab. Morowali,2024,206,9.0,334,0.453,Organosol,Permukiman,528,0,0.045,Low,0,Rendah
+Sulawesi Tengah,Kab. Morowali Utara,2024,271,5.7,797,0.509,Alluvial,Perkebunan,228,0,0.057,Low,0,Sedang
+Sulawesi Tengah,Kab. Parigi Moutong,2024,354,20.4,417,0.673,Organosol,Hutan,483,2,0.079,Low,2,Tinggi
+Sulawesi Tengah,Kab. Poso,2024,382,10.4,890,0.338,Regosol,Semak,742,2,0.082,Low,2,Tinggi
+Sulawesi Tengah,Kab. Sigi,2024,210,22.2,464,0.729,Organosol,Perkebunan,294,0,0.049,Low,1,Rendah
+Sulawesi Tengah,Kab. Tojo Una-Una,2024,221,9.5,431,0.374,Andosol,Pertanian,233,2,0.05,Low,0,Rendah
+Sulawesi Tengah,Kab. Tolitoli,2024,232,12.5,919,0.602,Organosol,Pertanian,458,0,0.051,Low,0,Sedang
+Sulawesi Tengah,Kota Palu,2024,369,10.0,767,0.326,Latosol,Hutan,537,0,0.077,Low,2,Tinggi

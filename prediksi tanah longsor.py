@@ -141,6 +141,3 @@ plt.colorbar(scatter, ax=axes[1, 1], label='Probabilitas Risiko')
 plt.tight_layout()
 plt.savefig('analisis_longsor_sulawesi_tengah.png', dpi=300, bbox_inches='tight')
 print("✅ Visualisasi disimpan sebagai 'analisis_longsor_sulawesi_tengah.png'")
-
-
-

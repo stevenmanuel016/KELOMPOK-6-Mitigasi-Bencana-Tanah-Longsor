@@ -43,7 +43,7 @@ for year in df['year'].unique():
 
 # ==================== 3. ANALISIS SPASIAL-TEMPORAL ====================
 print("\n" + "="*60)
-print("🗺️ ANALISIS SPASIAL-TEMPORAL")
+print("🗺️ ANALISIS SPASIAL-")
 print("="*60)
 
 # Rata-rata risiko per kabupaten

@@ -26,7 +26,7 @@ print(df.describe())
 
 # ==================== 2. ANALISIS RISIKO ====================
 print("\n" + "="*60)
-print("📈 ANALISIS TINGKAT RISIKO LONGSOR")
+print("📈 ANALISIS TINGKAT RISIKO")
 print("="*60)
 
 # Analisis distribusi risiko
